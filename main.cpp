@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 struct Student {
     std::string name;
@@ -33,6 +34,26 @@ void displayStudents(const std::vector<Student>& database) {
         std::cout << "Возраст: " << student.age << "\n";
         std::cout << "Специальность: " << student.major << "\n";
         std::cout << "Средний балл: " << student.gpa << "\n\n";
+    }
+}
+
+// Функция для удаления студента из базы данных
+void removeStudent(std::vector<Student>& database) {
+    std::string nameToRemove;
+    std::cout << "Введите имя студента для удаления: ";
+    std::cin >> nameToRemove;
+
+    // Находим студента для удаления с помощью "erase-remove idiom"
+    auto it = std::remove_if(database.begin(), database.end(),
+        [&](const Student& student) {
+            return student.name == nameToRemove;
+        });
+
+    if (it == database.end()) {
+        std::cout << "Студент с именем '" << nameToRemove << "' не найден.\n";
+    } else {
+        database.erase(it, database.end());
+        std::cout << "Студент '" << nameToRemove << "' успешно удален.\n";
     }
 }
 
